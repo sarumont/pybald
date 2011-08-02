@@ -21,7 +21,13 @@ class Duration():
 	_micros = 0
 
 	def __init__(self, value):
-		self._micros = value
+		if isinstance(value, str):
+			self._micros = Duration.parse(value)
+		elif isinstance(value, long) or isinstance(value, int) or isinstance(value, float):
+			self._micros = value
+		else:
+			raise InputError("Cannot create Duration from "+type(value))
+
 
 	@staticmethod
 	def parse(string):
@@ -33,7 +39,7 @@ class Duration():
 		for m in matches:
 			factor = Duration.parseUnit(m[1])
 			us += float(m[0]) * factor
-		return Duration(us)
+		return us
 
 	@staticmethod
 	def parseUnit(string):
@@ -59,19 +65,12 @@ class Duration():
 		else:
 			raise InvalidInput("Cannot determine time unit from string: "+string)
 
-	@staticmethod
-	def format(micros):
-		return Duration(micros).format()
-
-	def getMicros(self):
-		return self._micros
-
 	def format(self):
-		micros = self.getMicros()
-		#if isinstance(duration, timedelta):
-			#micros = duration.microseconds + duration.seconds*1000*1000 + duration.days*1000*1000*60*60*24
-		#else:
-			#micros = duration
+		""" Formats this duration as a String of the format 1d2h3m """
+		micros = self.getMicros();
+
+		if micros == 0:
+			return "0"
 
 		# start with the highest
 		formatted = ""
@@ -109,8 +108,12 @@ class Duration():
 			formatted += str(int(micros)) + "us"
 		return formatted
 
+	def getMicros(self):
+		""" returns the number of microseconds in this duration """
+		return self._micros
+
 if __name__ == "__main__":
-	dur = Duration.parse(sys.argv[1])
+	dur = Duration(sys.argv[1])
 	#print("timedelta: " + str(td))
 	print("micros: " + str(dur.getMicros()))
 	print("formatted: " + dur.format())
