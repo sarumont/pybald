@@ -6,8 +6,8 @@ class InvalidInput(Exception):
 	"""
 
 	def __init__(self, msg):
-		_msg = msg
+		self._msg = msg
 		return
 
 	def __str__(self):
-		print "Invalid input: "+_msg
+		print "Invalid input: "+self._msg
