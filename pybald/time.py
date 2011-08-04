@@ -21,13 +21,14 @@ class Duration():
 	_micros = 0
 
 	def __init__(self, value):
-		if isinstance(value, str):
+		if value == None:
+			self._micros = 0
+		elif isinstance(value, str):
 			self._micros = Duration.parse(value)
 		elif isinstance(value, long) or isinstance(value, int) or isinstance(value, float):
 			self._micros = value
 		else:
-			raise InputError("Cannot create Duration from "+type(value))
-
+			raise InvalidInput("Cannot create Duration from "+str(type(value)))
 
 	@staticmethod
 	def parse(string):
