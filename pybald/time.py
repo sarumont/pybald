@@ -23,7 +23,7 @@ class Duration():
 	def __init__(self, value):
 		if value == None:
 			self._micros = 0
-		elif isinstance(value, str):
+		elif isinstance(value, str) or isinstance(value, unicode):
 			self._micros = Duration.parse(value)
 		elif isinstance(value, long) or isinstance(value, int) or isinstance(value, float):
 			self._micros = value
