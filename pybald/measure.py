@@ -3,6 +3,7 @@ import sys
 from error import InvalidInput
 
 # constants
+GRAM_OUNCE_CONVERSION = 28.3495231
 
 # global for the pattern
 weight_regex = re.compile("((?:\d*\.\d+)|(?:\d+\.?\d*))\s*([a-zA-Z.]+)")
@@ -30,7 +31,7 @@ class Weight():
 				raise InvalidInput("Cannot create Weight from tuple with "+str(len(value))+" elements")
 		elif isinstance(value, long) or isinstance(value, int) or isinstance(value, float):
 			self._imperial = False
-			self._grams = value
+			self._grams = float(value)
 		else:
 			raise InvalidInput("Cannot create Weight from "+str(type(value)))
 
@@ -89,8 +90,51 @@ class Weight():
 			else:
 				return '%dg' % ( self._grams, )
 
+	def asOunces(self):
+		""" 
+		Returns the value of this Weight in ounces. If this object was not created with imperial
+		measurements, an estimate is returned
+		"""
+		global GRAM_OUNCE_CONVERSION
+		if self._imperial:
+			return 16*self._pounds + self._ounces
+		else:
+			return self._grams/GRAM_OUNCE_CONVERSION
+
+	def asGrams(self):
+		""" 
+		Returns the value of this Weight in grams. If this object was created with imperial
+		measurements, an estimate is returned
+		"""
+		global GRAM_OUNCE_CONVERSION
+		if self._imperial:
+			return GRAM_OUNCE_CONVERSION * (16*self._pounds + self._ounces)
+		else:
+			return self._grams
+
+	@staticmethod
+	def decode(value):
+		""" Method to decode a string generated from Weight.encode """
+		if value == None:
+			return Weight()
+		elif value.startswith('i'):
+			return Weight((0, int(value[1:None])))
+		elif value.startswith('m'):
+			return Weight(int(value[1:None]))
+		else:
+			raise InvalidInput("Cannot decode "+value+" to a Weight")
+
+	def encode(self):
+		if self._imperial:
+			return "i%d" % (self.asOunces(), )
+		else:
+			return "m%d" % (self.asGrams(), )
+
 if __name__ == "__main__":
 	w = Weight(sys.argv[1])
-	print("formatted: " + w.format())
-	w = Weight(( 3, 13, ))
-	print("formatted: " + w.format())
+	print("formatted: " + w.format() + ", grams = " + str(w.asGrams()) + ", ounces = " +
+			str(w.asOunces()) + ", encoded = " + w.encode())
+	w = Weight.decode(w.encode())
+	#w = Weight(( 3, 13, ))
+	print("formatted: " + w.format() + ", grams = " + str(w.asGrams()) + ", ounces = " +
+			str(w.asOunces()) + ", encoded = " + w.encode())
