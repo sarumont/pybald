@@ -17,7 +17,7 @@ class Weight():
 	_imperial = True
 
 	def __init__(self, value):
-		if value == None:
+		if not value:
 			pass
 		elif isinstance(value, str) or isinstance(value, unicode):
 			self.parse(value)
@@ -56,13 +56,19 @@ class Weight():
 				self._imperial = True
 				self._ounces += num
 			else:
-				raise InvalidInput("Cannot determine weight unit from string: "+string)
+				raise InvalidInput("Cannot determine weight unit from string: '"+string+"'")
+
+		# correct for decimals
+		if int(self._pounds) != self._pounds:
+			delta = self._pounds - int(self._pounds)
+			self._ounces += round(16*delta)
 
 		# ensure we didn't overflow
 		if self._imperial and self._ounces >= 16:
 			pounds = int(self._ounces/16)
 			self._ounces -= pounds*16
 			self._pounds += pounds
+		
 
 	def isImperial(self):
 		return self._imperial
