@@ -113,6 +113,54 @@ class Duration():
 		""" returns the number of microseconds in this duration """
 		return self._micros
 
+	def get_seconds(self):
+		""" Returns the number of whole seconds in this duration """
+		micros = self._micros
+		if micros == 0:
+			return 0
+		weeks = int(micros / WEEK)
+		if weeks > 0:
+			micros -= weeks*WEEK
+		days = int(micros / DAY)
+		if days > 0:
+			micros -= days*DAY
+		hours = int(micros / HOUR)
+		if hours > 0:
+			micros -= hours*HOUR
+		minutes = int(micros / MINUTE)
+		if minutes > 0:
+			micros -= minutes*MINUTE
+		return int(micros / SECOND)
+
+	def get_minutes(self):
+		""" Returns the number of whole minutes in this duration """
+		micros = self._micros
+		if micros == 0:
+			return 0
+		weeks = int(micros / WEEK)
+		if weeks > 0:
+			micros -= weeks*WEEK
+		days = int(micros / DAY)
+		if days > 0:
+			micros -= days*DAY
+		hours = int(micros / HOUR)
+		if hours > 0:
+			micros -= hours*HOUR
+		return int(micros / MINUTE)
+
+	def get_hours(self):
+		""" Returns the number of whole hours in this duration """
+		micros = self._micros
+		if micros == 0:
+			return 0
+		weeks = int(micros / WEEK)
+		if weeks > 0:
+			micros -= weeks*WEEK
+		days = int(micros / DAY)
+		if days > 0:
+			micros -= days*DAY
+		return int(micros / HOUR)
+
 if __name__ == "__main__":
 	dur = Duration(sys.argv[1])
 	#print("timedelta: " + str(td))
