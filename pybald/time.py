@@ -38,12 +38,12 @@ class Duration():
 		matches = duration_regex.findall(string)
 		us = 0
 		for m in matches:
-			factor = Duration.parseUnit(m[1])
+			factor = Duration.parse_unit(m[1])
 			us += float(m[0]) * factor
 		return us
 
 	@staticmethod
-	def parseUnit(string):
+	def parse_unit(string):
 		""" 
 		Parses a string which should represent a unit of time measure, returning the factor to multiply
 		a value by to convert to microseconds
@@ -68,7 +68,7 @@ class Duration():
 
 	def format(self):
 		""" Formats this duration as a String of the format 1d2h3m """
-		micros = self.getMicros();
+		micros = self.get_micros();
 
 		if micros == 0:
 			return "0"
@@ -109,12 +109,12 @@ class Duration():
 			formatted += str(int(micros)) + "us"
 		return formatted
 
-	def getMicros(self):
+	def get_micros(self):
 		""" returns the number of microseconds in this duration """
 		return self._micros
 
 if __name__ == "__main__":
 	dur = Duration(sys.argv[1])
 	#print("timedelta: " + str(td))
-	print("micros: " + str(dur.getMicros()))
+	print("micros: " + str(dur.get_micros()))
 	print("formatted: " + dur.format())
