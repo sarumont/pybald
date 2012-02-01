@@ -3,7 +3,7 @@ from httplib2 import Http
 from urllib import quote
 import json
 
-def launder(num):
+def launder(num, logger = None):
 	"""Returns a laundered phone number using the service at http://numberlaundry.whatcheer.com/
 
 	:num: raw phone number input
@@ -14,6 +14,10 @@ def launder(num):
 	headers = {'Accept': 'application/json'}
 	url = 'http://numberlaundry.whatcheer.com/launder/'+quote(num)
 	response, content = client.request(url, 'GET', headers = headers)
+
+	if logger:
+		logger.debug(response)
+		logger.debug(content)
 
 	# error checking
 	if response.status != 200:
