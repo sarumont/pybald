@@ -6,20 +6,20 @@ class InvalidInput(Exception):
 	"""
 
 	def __init__(self, msg):
-		self._msg = msg
+		self.msg = msg
 		return
 
 	def __str__(self):
-		print "Invalid input: "+self._msg
+		print "Invalid input: "+self.msg
 
 class ResourceUnavailable(Exception):
 	"""Exception representing a failed request to a resource"""
 
 	def __init__(self, msg):
 		Exception.__init__(self)
-		self._msg = msg
+		self.msg = msg
 
 	def __str__(self):
-		print "Resource unavailable: %s" % (self._msg, )
+		print "Resource unavailable: %s" % (self.msg, )
 		
 		
