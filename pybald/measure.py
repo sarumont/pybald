@@ -6,7 +6,7 @@ from error import InvalidInput
 GRAM_OUNCE_CONVERSION = 28.3495231
 
 # global for the pattern
-weight_regex = re.compile("((?:\d*\.\d+)|(?:\d+\.?\d*))\s*([a-zA-Z.]+)")
+weight_regex = re.compile("((?:\d*\.\d+)|(?:\d+\.?\d*))\s*([a-zA-Z.]*)")
 
 class Weight():
 	""" Class representing the weight of an object with a base unit of grams """
@@ -43,7 +43,11 @@ class Weight():
 		for m in matches:
 			num = float(m[0])
 			string = m[1].strip('.')
-			if string == "g" or string == "gram" or string == "grams":
+			if string is None or string == "":
+				# assume a numeric string is an imperial unit
+				self._imperial = True
+				self._pounds += num
+			elif string == "g" or string == "gram" or string == "grams":
 				self._imperial = False
 				self._grams += num
 			elif string == "kg" or string == "kilos" or string == "kilogram" or string == "kilograms":
