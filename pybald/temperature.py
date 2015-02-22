@@ -10,6 +10,14 @@ def c_to_f(temp):
     """
     return temp * 9.0 / 5.0 + 32.0
 
+def f_to_c(temp):
+    """Converts a Farenheit temperature to Celcius
+
+    :temp: A temperature in Farenheit
+    :returns: The equivalent temperature in Celcius
+    """
+    return (temp - 32.0) * 5.0 / 9.0
+
 class PID:
     """
     Discrete PID control
